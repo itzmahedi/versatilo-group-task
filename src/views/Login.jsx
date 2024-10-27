@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react'
 import {  } from 'react';
 import Cookies from 'js-cookie';
 
+import { useSearchParams } from 'next/navigation'
+
 // Next Imports
 import { useRouter } from 'next/navigation'
 
@@ -35,7 +37,7 @@ import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
 
 // Auth Imports
-import { useLoginMutation } from '../redux/features/authApiSlice'
+import { useLoginMutation, useLogoutUserMutation } from '../redux/features/authApiSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAuth } from '../redux/features/authSlice'
 
@@ -91,6 +93,19 @@ const LoginV2 = ({ mode }) => {
   )
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
+
+  const searchParams = useSearchParams()
+  const [logoutUser, { isLoadings, isErrors, errors }] = useLogoutUserMutation();
+
+  // for session out
+  useEffect(() => {
+    const handleLogout = async () => {
+      await logoutUser();
+    };
+    if(searchParams.get('sessionExpired')){
+      handleLogout();
+    }
+  }, [router.query, logoutUser]);
 
   // Login form
   useEffect(() => {
