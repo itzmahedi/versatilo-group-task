@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
+
 import Cookies from 'js-cookie';
 
 const ProtectRoute = ({ children }) => {
@@ -11,6 +13,7 @@ const ProtectRoute = ({ children }) => {
 
   useEffect(() => {
     const token = Cookies.get('access_token');
+
     if (!token) {
       router.push('/login');
     }
