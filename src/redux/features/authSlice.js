@@ -30,6 +30,7 @@ const authSlice = createSlice({
         } catch (error) {
           console.error('Error parsing user data from cookies:', error);
           Cookies.remove('authUser');
+          Cookies.remove('access_token');
         }
       }
     },

@@ -178,6 +178,7 @@ const LoginV2 = ({ mode }) => {
             setLoginError(result.message);
           }
       } catch (err) {
+          setLoginError('No user found');
           console.error('Login failed:', err);
       }
   };
