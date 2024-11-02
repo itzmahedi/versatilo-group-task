@@ -1,9 +1,10 @@
 'use client'
 
 // React Imports
-import { useRef, useState } from 'react'
-import { useLogoutUserMutation } from '@/redux/features/authApiSlice'
-import { useSelector } from 'react-redux';
+import { useRef, useState } from 'react';
+
+
+
 
 // Next Imports
 import { useRouter } from 'next/navigation'
@@ -21,6 +22,12 @@ import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+
+import { useSelector } from 'react-redux'
+
+import { useLogoutUserMutation } from '@/redux/features/authApiSlice'
+
+
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
@@ -44,7 +51,9 @@ const UserDropdown = () => {
   const user = useSelector((state) => state.auth.user);
   const userName = user ? `${user.first_name} ${user.last_name}` : '';
   const userEmail = user?.email || '';
+
   // Refs
+
   const anchorRef = useRef(null)
 
   // Hooks

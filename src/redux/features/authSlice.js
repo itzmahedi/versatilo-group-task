@@ -20,9 +20,11 @@ const authSlice = createSlice({
     },
     checkAuth: (state) => {
       const userDataString = Cookies.get('authUser');
+
       if (userDataString) {
         try {
           const userData = JSON.parse(userDataString);
+
           state.isAuthenticated = true;
           state.user = userData;
         } catch (error) {

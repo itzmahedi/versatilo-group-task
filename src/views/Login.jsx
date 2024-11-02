@@ -2,13 +2,14 @@
 
 // React Imports
 import { useState, useEffect } from 'react'
+
 import {  } from 'react';
+import { useSearchParams , useRouter } from 'next/navigation'
+
 import Cookies from 'js-cookie';
 
-import { useSearchParams } from 'next/navigation'
 
 // Next Imports
-import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -25,6 +26,8 @@ import Divider from '@mui/material/Divider'
 import classnames from 'classnames'
 
 // Component Imports
+import { useDispatch, useSelector } from 'react-redux'
+
 import Link from '@components/Link'
 import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
@@ -38,7 +41,6 @@ import { useSettings } from '@core/hooks/useSettings'
 
 // Auth Imports
 import { useLoginMutation, useLogoutUserMutation } from '../redux/features/authApiSlice'
-import { useDispatch, useSelector } from 'react-redux'
 import { setAuth } from '../redux/features/authSlice'
 
 // Styled Custom Components
@@ -102,6 +104,7 @@ const LoginV2 = ({ mode }) => {
     const handleLogout = async () => {
       await logoutUser();
     };
+
     if(searchParams.get('sessionExpired')){
       handleLogout();
     }
@@ -110,18 +113,24 @@ const LoginV2 = ({ mode }) => {
   // Login form
   useEffect(() => {
     const token = Cookies.get('access_token');
+
     if (token) {
       router.push('/home');
     }
+
+
     // back disabled
     const disableBackButton = () => {
       window.history.pushState(null, '', window.location.href);
     };
+
     disableBackButton();
     window.addEventListener('popstate', disableBackButton);
-    return () => {
-      window.removeEventListener('popstate', disableBackButton);
-    };
+
+
+      return () => {
+            window.removeEventListener('popstate', disableBackButton);
+          };
   }, [router]);
 
   const [email, setEmail] = useState('');
@@ -141,23 +150,24 @@ const LoginV2 = ({ mode }) => {
   };
 
   const setUserDataInCookie = (user, remember) => {
-      if (remember) {
-          Cookies.set('authUser', JSON.stringify(user), { 
-              expires: 7,
-              secure: true,
-              sameSite: 'Strict',
-          });
-      }
+      Cookies.set('authUser', JSON.stringify(user), {
+          expires: remember ? 7 : undefined,
+          secure: true,
+          sameSite: 'Strict',
+      });
   };
 
   const handleSubmit = async (e) => {
       e.preventDefault();
       setLoginError(null);
+
       try {
           const result = await login({ email, password }).unwrap();
+
           if (result?.success) {
               const user = result.results.user;
-              dispatch(setAuth({ 
+
+              dispatch(setAuth({
                   isAuthenticated: true,
                   user: user,
               }));
@@ -202,7 +212,7 @@ const LoginV2 = ({ mode }) => {
             {loginError && (
               <Typography
                 sx={{
-                  color: 'white',       
+                  color: 'white',
                   backgroundColor: 'error.main',
                   textAlign: 'center',
                   borderRadius: '8px',
@@ -220,7 +230,7 @@ const LoginV2 = ({ mode }) => {
             onSubmit={handleSubmit}
             className='flex flex-col gap-5'
           >
-            <CustomTextField autoFocus fullWidth label='Email or Username' placeholder='Enter your email or username' 
+            <CustomTextField autoFocus fullWidth label='Email or Username' placeholder='Enter your email or username'
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
